@@ -121,6 +121,26 @@
             background: rgba(124, 58, 237, 0.05);
             z-index: 10;
         }
+        .chrome-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, #f59e0b 0%, #ef4444 45%, #3b82f6 100%);
+            box-shadow: 0 0 30px rgba(239,68,68,0.25);
+            border: 1px solid rgba(255,255,255,0.12);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        }
+        
+        .chrome-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 0 40px rgba(245,158,11,0.25), 0 0 20px rgba(59,130,246,0.25);
+            filter: brightness(1.05);
+        }
+        
+        .chrome-btn:active {
+            transform: translateY(0) scale(0.99);
+        }
     </style>
 </head>
 <body class="font-sans antialiased text-gray-200 bg-[#05070a]">
@@ -147,7 +167,7 @@
         <header class="pt-20 pb-10 text-center px-4">
             <div class="animate__animated animate__fadeInDown">
                 <span class="bg-purple-900/30 text-purple-400 border border-purple-500/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                    Firefox is now live
+                    Chrome & Firefox are now live
                 </span>
 
                 <h1 class="text-6xl md:text-8xl font-black mt-8 mb-6 tracking-tight leading-none uppercase">
@@ -170,15 +190,17 @@
                         </span>
                         ADD TO FIREFOX
                     </a>
-
-                    <div class="btn-disabled px-10 py-5 rounded-2xl font-black text-xl border border-white/10 uppercase tracking-wide">
-                        ADD TO CHROME
-                        <span class="text-[10px] bg-blue-600/50 text-white px-2.5 py-1 rounded-full ml-3 italic font-black transition-colors duration-300">
-                            COMING SOON
+                
+                    <a href="DEIN_CHROME_STORE_LINK"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="chrome-btn px-10 py-5 rounded-2xl font-black text-xl text-white uppercase tracking-wide">
+                        <span class="absolute -top-3 -right-3 bg-white text-red-600 text-[10px] px-3 py-1 rounded-full font-black shadow-lg">
+                            NEW
                         </span>
-                    </div>
+                        ADD TO CHROME
+                    </a>
                 </div>
-
                 <div class="mt-12 flex justify-center">
                     <div class="btn-disabled flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 bg-white/2 relative">
                         <img src="phantom-icon.png" alt="Phantom" class="w-6 h-6 opacity-40">

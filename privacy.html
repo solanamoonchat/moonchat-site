@@ -8,20 +8,23 @@
     <link rel="icon" type="image/png" href="icon32.png">
 
     <style>
-        body { 
-            background-color: #05070a; 
-            color: #e2e8f0; 
+        body {
+            background-color: #05070a;
+            color: #e2e8f0;
             margin: 0;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-        .purple-glow { 
-            background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, rgba(5,7,10,0) 70%); 
+
+        .purple-glow {
+            background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, rgba(5,7,10,0) 70%);
         }
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255,255,255,0.1); 
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
+
         .text-gradient {
             background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%);
             -webkit-background-clip: text;
@@ -38,7 +41,7 @@
     </div>
 
     <div class="relative z-10 min-h-screen flex flex-col items-center py-20 px-6">
-        
+
         <a href="index.html" class="mb-12 flex items-center gap-2 group transition-all">
             <span class="text-gray-500 group-hover:text-purple-400 transition-colors">←</span>
             <span class="text-xl font-black italic uppercase tracking-tighter group-hover:opacity-80">
@@ -51,47 +54,173 @@
                 Privacy <span class="text-gradient">Policy</span>
             </h1>
 
-            <div class="space-y-10 text-gray-300">
-                
+            <div class="space-y-12 text-gray-300">
+
                 <section>
-                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Identity & Access</h2>
-                    <p class="text-xl font-bold text-white mb-2 italic">Pseudonymous Participation</p>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Overview</h2>
+                    <p class="text-xl font-bold text-white mb-2 italic">Privacy Policy for MoonChat</p>
                     <p class="leading-relaxed">
-                        MoonChat is designed for maximum privacy. Currently, access is granted via a <strong class="text-white">self-chosen username</strong>. No email, password, or real-life identity is required to participate in the ecosystem.
+                        MoonChat is a browser extension that provides token-specific chat room access for supported Solana-related websites.
+                        This Privacy Policy explains what data MoonChat processes, how it is used, how it is stored, and how it is shared.
                     </p>
                 </section>
 
                 <section>
-                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Data Protocol</h2>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Identity & Access</h2>
+                    <p class="text-xl font-bold text-white mb-2 italic">Pseudonymous Participation</p>
+                    <p class="leading-relaxed">
+                        MoonChat is designed to operate without requiring a real name, email address, or password.
+                        Users participate through a <strong class="text-white">self-chosen username or nickname</strong>.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Data We Process</h2>
                     <ul class="space-y-6">
                         <li class="flex gap-4">
                             <span class="text-purple-500 font-bold font-mono">01</span>
                             <div>
-                                <strong class="text-white block mb-1">Usernames & Profiles</strong>
-                                <p class="text-sm">We only store the username you choose to identify your messages and settings. This data is not linked to any personal information.</p>
+                                <strong class="text-white block mb-1">Username / Nickname</strong>
+                                <p class="text-sm leading-relaxed">
+                                    We process the username or nickname you choose in order to identify your messages and user state inside MoonChat.
+                                </p>
                             </div>
                         </li>
+
                         <li class="flex gap-4">
                             <span class="text-purple-500 font-bold font-mono">02</span>
                             <div>
-                                <strong class="text-white block mb-1">Future Web3 Integration</strong>
-                                <p class="text-sm">We are preparing to integrate Solana Wallet authentication (e.g., Phantom). Once implemented, you will have the option to link your identity to your public wallet address for enhanced security and features.</p>
+                                <strong class="text-white block mb-1">Chat Messages</strong>
+                                <p class="text-sm leading-relaxed">
+                                    Chat messages sent through MoonChat are processed in order to display them in token-specific chat rooms and provide realtime chat functionality.
+                                </p>
                             </div>
                         </li>
+
                         <li class="flex gap-4">
                             <span class="text-purple-500 font-bold font-mono">03</span>
                             <div>
-                                <strong class="text-white block mb-1">Zero Tracking</strong>
-                                <p class="text-sm">We do not use invasive tracking cookies or third-party analytics that profile your behavior. Your interactions stay within the MoonChat protocol.</p>
+                                <strong class="text-white block mb-1">Token and Room Context</strong>
+                                <p class="text-sm leading-relaxed">
+                                    MoonChat processes token addresses and related room identifiers so the extension can open the correct token-specific chat room.
+                                </p>
+                            </div>
+                        </li>
+
+                        <li class="flex gap-4">
+                            <span class="text-purple-500 font-bold font-mono">04</span>
+                            <div>
+                                <strong class="text-white block mb-1">Supported Page Context</strong>
+                                <p class="text-sm leading-relaxed">
+                                    On supported websites, MoonChat may inspect the currently open token page and limited relevant page content to determine which token is being viewed and connect the user to the matching chat room.
+                                </p>
+                            </div>
+                        </li>
+
+                        <li class="flex gap-4">
+                            <span class="text-purple-500 font-bold font-mono">05</span>
+                            <div>
+                                <strong class="text-white block mb-1">Locally Stored Preferences</strong>
+                                <p class="text-sm leading-relaxed">
+                                    The extension stores lightweight local state such as favorites, recently viewed rooms, username, and basic interface/session preferences in the browser.
+                                </p>
                             </div>
                         </li>
                     </ul>
                 </section>
 
                 <section>
-                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Service Providers</h2>
-                    <p class="leading-relaxed mb-4 text-sm">
-                        To provide real-time market data and analytics, the extension may communicate with public APIs (such as DexScreener). These interactions are limited to the technical data required to fetch the requested information.
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">How We Use Data</h2>
+                    <p class="leading-relaxed text-sm">
+                        MoonChat uses processed data only to provide its core extension functionality, including:
+                    </p>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm text-gray-300">
+                        <li>opening the correct token-specific chat room</li>
+                        <li>displaying and sending chat messages</li>
+                        <li>showing trending rooms and favorites</li>
+                        <li>providing realtime chat updates</li>
+                        <li>maintaining local extension preferences and session-related state</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Supported Websites</h2>
+                    <p class="leading-relaxed text-sm mb-4">
+                        MoonChat currently supports token detection and room-opening flows on supported Solana-related websites, including:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 text-sm text-gray-300">
+                        <li>pump.fun</li>
+                        <li>gmgn.ai</li>
+                        <li>axiom.trade</li>
+                        <li>dexscreener.com</li>
+                    </ul>
+                    <p class="leading-relaxed text-sm mt-4">
+                        This functionality is limited to the user-facing feature of opening the matching MoonChat room for the token currently being viewed.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Service Providers & Data Sharing</h2>
+                    <p class="leading-relaxed text-sm mb-4">
+                        MoonChat shares data only as necessary to operate the service.
+                    </p>
+                    <div class="space-y-4 text-sm leading-relaxed">
+                        <div>
+                            <strong class="text-white block mb-1">Main Backend</strong>
+                            <p>
+                                MoonChat communicates with <span class="text-blue-400">https://api.getmoonchat.app</span>
+                                for backend functionality, including chat room data, trending rooms, token metadata lookups, and message submission.
+                            </p>
+                        </div>
+                        <div>
+                            <strong class="text-white block mb-1">Realtime Communication</strong>
+                            <p>
+                                MoonChat communicates with <span class="text-blue-400">wss://api.getmoonchat.app</span>
+                                for live chat updates and realtime room activity.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="leading-relaxed text-sm mt-4">
+                        MoonChat does <strong class="text-white">not</strong> sell user data, does not use user data for advertising purposes, and does not transfer user data to data brokers or information resellers.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Local Storage</h2>
+                    <p class="leading-relaxed text-sm">
+                        Certain data is stored locally in the browser to improve usability and speed, including:
+                    </p>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-sm text-gray-300">
+                        <li>username / nickname</li>
+                        <li>favorites</li>
+                        <li>recently viewed rooms</li>
+                        <li>lightweight extension UI state</li>
+                        <li>temporary room-opening state used by extension flows</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Remote Code & Tracking</h2>
+                    <ul class="space-y-4 text-sm leading-relaxed">
+                        <li>
+                            <strong class="text-white block mb-1">No Remote JavaScript</strong>
+                            MoonChat does not load or execute remote JavaScript.
+                        </li>
+                        <li>
+                            <strong class="text-white block mb-1">No Advertising Use</strong>
+                            User data is not used for personalized advertising, credit scoring, lending decisions, or unrelated profiling.
+                        </li>
+                        <li>
+                            <strong class="text-white block mb-1">No Invasive Tracking</strong>
+                            MoonChat does not use invasive third-party tracking systems to profile user behavior for advertising purposes.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-purple-400 font-bold uppercase tracking-[0.2em] text-xs mb-4">Security</h2>
+                    <p class="leading-relaxed text-sm">
+                        MoonChat uses secure network connections for backend and realtime communication.
                     </p>
                 </section>
 
@@ -99,11 +228,11 @@
                     <h2 class="text-gray-500 font-bold uppercase tracking-[0.2em] text-xs mb-6">Updates & Contact</h2>
                     <div class="space-y-4 text-xs leading-relaxed text-gray-500 font-medium">
                         <p>
-                            As the MoonChat protocol evolves, we will update this policy to reflect new Web3 features. Your continued use signifies your trust in our privacy-first approach.
+                            We may update this Privacy Policy from time to time to reflect changes to MoonChat’s functionality, supported websites, or legal requirements.
                         </p>
-                        <div class="flex items-center gap-3">
-                            <span class="text-gray-500 font-mono text-xs">ENQUIRIES:</span>
-                            <a href="mailto:support@getmoonchat.app " class="text-blue-400 hover:text-blue-300 transition underline decoration-blue-400/30">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <span class="text-gray-500 font-mono text-xs">CONTACT:</span>
+                            <a href="mailto:support@getmoonchat.app" class="text-blue-400 hover:text-blue-300 transition underline decoration-blue-400/30">
                                 support@getmoonchat.app
                             </a>
                         </div>

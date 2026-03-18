@@ -1,411 +1,1472 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoonChat | The #1 Solana Trading Extension</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoonChat | Where Coins Talk.</title>
+    <meta
+        name="description"
+        content="MoonChat is the Solana trading extension built for memecoin traders. Native pop-out mode, live rooms, faster room switching and a cleaner trading workflow."
+    />
+    <meta name="theme-color" content="#060814" />
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="icon" type="image/png" href="icon32.png">
+    <link rel="icon" type="image/png" href="icon32.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg: #04060b;
+            --bg-2: #08101b;
+            --panel: rgba(255,255,255,0.05);
+            --panel-2: rgba(255,255,255,0.035);
+            --line: rgba(255,255,255,0.09);
+            --line-strong: rgba(255,255,255,0.14);
+            --text: #edf2ff;
+            --muted: #92a0bb;
+            --purple: #8b5cf6;
+            --blue: #3b82f6;
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --pink: #ec4899;
+            --orange: #fb923c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-y: auto;
+        }
+
         body {
-            background-color: #05070a;
-            color: #e2e8f0;
+            margin: 0;
+            color: var(--text);
             overflow-x: hidden;
+            font-family: "Inter", sans-serif;
+            background:
+                radial-gradient(circle at 12% 16%, rgba(139,92,246,0.18), transparent 26%),
+                radial-gradient(circle at 86% 14%, rgba(59,130,246,0.15), transparent 22%),
+                radial-gradient(circle at 82% 82%, rgba(34,211,238,0.08), transparent 18%),
+                linear-gradient(180deg, #04060b 0%, #06101a 45%, #04060b 100%);
         }
 
-        .purple-glow {
-            background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, rgba(5,7,10,0) 70%);
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(circle at center, black 32%, transparent 100%);
+            opacity: 0.35;
+            z-index: 0;
         }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+        img {
+            display: block;
+            max-width: 100%;
         }
 
-        .btn-disabled {
-            position: relative;
-            background: rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.3);
-            cursor: not-allowed;
-            overflow: hidden;
+        .font-display {
+            font-family: "Space Grotesk", sans-serif;
         }
 
-        .firefox-btn {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%);
-            box-shadow: 0 0 30px rgba(124,58,237,0.35);
-            border: 1px solid rgba(255,255,255,0.12);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-        }
-
-        .firefox-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 0 40px rgba(59,130,246,0.35), 0 0 20px rgba(124,58,237,0.35);
-            filter: brightness(1.05);
-        }
-
-        .firefox-btn:active {
-            transform: translateY(0) scale(0.99);
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #05070a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #7c3aed 0%, #3b82f6 100%);
-            border-radius: 10px;
-        }
-
-        .roadmap-scroll {
-            scrollbar-color: #3b82f6 rgba(255,255,255,0.05);
-        }
-
-        .roadmap-scroll::-webkit-scrollbar {
-            height: 6px !important;
-            display: block !important;
-        }
-
-        .roadmap-scroll::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05) !important;
-            border-radius: 10px;
-        }
-
-        .roadmap-scroll::-webkit-scrollbar-thumb {
-            background: #3b82f6 !important;
-            border-radius: 10px !important;
-            transition: background 0.3s;
-        }
-
-        .roadmap-scroll::-webkit-scrollbar-thumb:hover {
-            background: #60a5fa !important;
-            cursor: grab;
-        }
-
-        .roadmap-scroll::-webkit-scrollbar-thumb:active {
-            background: #93c5fd !important;
-            cursor: grabbing;
-        }
-
-        .roadmap-card {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.1);
+        .section-shell {
             position: relative;
             z-index: 1;
         }
 
-        @keyframes bounce-slow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .glass {
+            background: linear-gradient(180deg, rgba(255,255,255,0.065), rgba(255,255,255,0.035));
+            border: 1px solid var(--line);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.04),
+                0 20px 60px rgba(0,0,0,0.28);
         }
 
-        .animate-bounce-short {
-            animation: bounce-slow 1s infinite;
+        .glass-soft {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
 
-        .roadmap-card:hover {
-            transform: translateY(-15px);
-            border-color: #7c3aed;
-            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.2);
-            background: rgba(124, 58, 237, 0.05);
-            z-index: 10;
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: #b8c4da;
         }
-        .chrome-btn {
+
+        .eyebrow::before {
+            content: "";
+            width: 34px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: #dbe4f7;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--purple), var(--blue));
+            box-shadow: 0 0 18px rgba(139,92,246,0.85);
+        }
+
+        .hero-title {
+            line-height: 0.93;
+            letter-spacing: -0.07em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #ffffff 0%, #c4b5fd 35%, #60a5fa 72%, #67e8f9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 60;
+            padding: 16px 16px 0;
+            transition: padding .22s ease;
+        }
+
+        .site-header.compact {
+            padding-top: 10px;
+        }
+
+        .nav-shell {
+            background: rgba(7, 10, 18, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                0 18px 45px rgba(0,0,0,0.26);
+            transition:
+                background .22s ease,
+                border-color .22s ease,
+                box-shadow .22s ease,
+                transform .22s ease;
+        }
+
+        .site-header.compact .nav-shell {
+            background: rgba(7, 10, 18, 0.88);
+            border-color: rgba(255,255,255,0.12);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.06),
+                0 20px 52px rgba(0,0,0,0.34);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #95a3bd;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 12px;
+            font-weight: 800;
+            transition: color .22s ease, transform .22s ease;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -7px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+            transition: width .22s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .page-top-space {
+            padding-top: 110px;
+        }
+
+        .store-btn,
+        .social-btn {
             position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(90deg, #f59e0b 0%, #ef4444 45%, #3b82f6 100%);
-            box-shadow: 0 0 30px rgba(239,68,68,0.25);
-            border: 1px solid rgba(255,255,255,0.12);
-            transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+            gap: 10px;
+            min-height: 58px;
+            padding: 0 26px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            transition:
+                transform .22s ease,
+                box-shadow .22s ease,
+                border-color .22s ease,
+                background .22s ease,
+                filter .22s ease;
+            overflow: hidden;
+            isolation: isolate;
+            will-change: transform;
         }
-        
-        .chrome-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 0 40px rgba(245,158,11,0.25), 0 0 20px rgba(59,130,246,0.25);
+
+        .store-btn::before,
+        .social-btn::before {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+            opacity: 0.85;
+            z-index: -1;
+        }
+
+        .store-btn::after,
+        .social-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -130%;
+            width: 52%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.25),
+                transparent
+            );
+            transform: skewX(-24deg);
+            transition: left .7s ease;
+            pointer-events: none;
+        }
+
+        .store-btn:hover::after,
+        .social-btn:hover::after {
+            left: 145%;
+        }
+
+        .store-btn:hover,
+        .social-btn:hover {
+            transform: translateY(-4px) scale(1.015);
             filter: brightness(1.05);
         }
-        
-        .chrome-btn:active {
-            transform: translateY(0) scale(0.99);
+
+        .store-btn:active,
+        .social-btn:active {
+            transform: translateY(-1px) scale(0.995);
+        }
+
+        .store-btn.chrome {
+            color: #ffffff;
+            background: linear-gradient(135deg, #0f766e 0%, #14b8a6 48%, #67e8f9 100%);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow:
+                0 14px 34px rgba(20,184,166,0.24),
+                0 18px 42px rgba(103,232,249,0.16);
+        }
+
+        .store-btn.chrome:hover {
+            box-shadow:
+                0 18px 42px rgba(20,184,166,0.32),
+                0 24px 55px rgba(103,232,249,0.22);
+        }
+
+        .store-btn.firefox {
+            color: #ffffff;
+            background: linear-gradient(135deg, #9333ea 0%, #c026d3 48%, #fb7185 100%);
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow:
+                0 14px 34px rgba(192,38,211,0.24),
+                0 18px 42px rgba(251,113,133,0.16);
+        }
+
+        .store-btn.firefox:hover {
+            box-shadow:
+                0 18px 42px rgba(192,38,211,0.32),
+                0 24px 55px rgba(251,113,133,0.22);
+        }
+
+        .social-btn.x {
+            color: #eef3ff;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow:
+                0 12px 28px rgba(0,0,0,0.18),
+                inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .social-btn.x:hover {
+            border-color: rgba(139,92,246,0.34);
+            box-shadow:
+                0 16px 34px rgba(0,0,0,0.22),
+                0 0 0 1px rgba(139,92,246,0.10) inset,
+                0 0 28px rgba(59,130,246,0.10);
+        }
+
+        .simple-card {
+            border-radius: 28px;
+            padding: 28px;
+            transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+        }
+
+        .simple-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139,92,246,0.18);
+        }
+
+        .product-line {
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 20px;
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform .22s ease, border-color .22s ease, background .22s ease;
+        }
+
+        .product-line:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139,92,246,0.18);
+            background: rgba(255,255,255,0.045);
+        }
+
+        .product-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(59,130,246,0.20));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .marquee-shell {
+            overflow: hidden;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+            position: relative;
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: marqueeMove 28s linear infinite;
+            will-change: transform;
+        }
+
+        .marquee-shell:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        .marquee-group {
+            display: flex;
+            gap: 16px;
+            padding: 18px 0;
+            flex-shrink: 0;
+        }
+
+        .marquee-chip {
+            min-width: 180px;
+            height: 72px;
+            padding: 0 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            color: white;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .marquee-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            flex: 0 0 20px;
+            display: block;
+        }
+
+        @keyframes marqueeMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-50% - 8px)); }
+        }
+
+        .roadmap-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roadmap-arrow {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform .2s ease, background .2s ease, border-color .2s ease;
+        }
+
+        .roadmap-arrow:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .roadmap-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            overflow-y: visible;
+            padding-top: 14px;
+            padding-bottom: 18px;
+            margin-top: -14px;
+            scroll-snap-type: x proximity;
+            overscroll-behavior-x: contain;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #4f7cff rgba(255,255,255,0.06);
+        }
+
+        .roadmap-track::-webkit-scrollbar {
+            height: 9px;
+        }
+
+        .roadmap-track::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 999px;
+        }
+
+        .roadmap-track::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+            border-radius: 999px;
+        }
+
+        .roadmap-card {
+            position: relative;
+            min-width: 310px;
+            max-width: 310px;
+            min-height: 460px;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+            border-radius: 28px;
+            padding: 28px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.09);
+            transition:
+                transform .32s ease,
+                border-color .32s ease,
+                background .32s ease,
+                box-shadow .32s ease,
+                opacity .32s ease;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-10px);
+            z-index: 10;
+        }
+
+        .roadmap-phase,
+        .roadmap-status,
+        .roadmap-title {
+            transition: transform .24s ease, color .24s ease, opacity .24s ease;
+        }
+
+        .roadmap-card:hover .roadmap-phase {
+            color: #d6c6ff !important;
+        }
+
+        .roadmap-card:hover .roadmap-title {
+            transform: translateY(-1px);
+        }
+
+        .roadmap-card:hover .roadmap-status {
+            transform: translateY(-1px);
+        }
+
+        .roadmap-phase {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            margin-bottom: 14px;
+        }
+
+        .roadmap-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-top: 18px;
+        }
+
+        .roadmap-status.live {
+            color: #9ff5d0;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(52,211,153,0.18);
+        }
+
+        .cta-panel {
+            background:
+                radial-gradient(circle at top left, rgba(139,92,246,0.20), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(59,130,246,0.16), transparent 34%),
+                linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+        }
+
+        .menu-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .28s ease;
+        }
+
+        .menu-panel.open {
+            max-height: 420px;
+        }
+
+
+        @media (max-width: 768px) {
+            .page-top-space {
+                padding-top: 100px;
+            }
+
+            .product-line {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-card {
+                min-width: 85vw;
+                max-width: 85vw;
+            }
+        }
+
+
+        .simple-card {
+            border-radius: 28px;
+            padding: 28px;
+            transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+        }
+
+        .simple-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139,92,246,0.18);
+        }
+
+        .product-line {
+            display: grid;
+            grid-template-columns: 72px 1fr;
+            gap: 20px;
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform .22s ease, border-color .22s ease, background .22s ease;
+        }
+
+        .product-line:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139,92,246,0.18);
+            background: rgba(255,255,255,0.045);
+        }
+
+        .product-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            color: white;
+            background: linear-gradient(135deg, rgba(139,92,246,0.22), rgba(59,130,246,0.20));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .marquee-shell {
+            overflow: hidden;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marqueeMove 24s linear infinite;
+        }
+
+        .marquee-shell:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        .marquee-group {
+            display: flex;
+            gap: 16px;
+            padding: 18px 16px;
+        }
+
+        .marquee-chip {
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 72px;
+            padding: 0 22px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            color: white;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        @keyframes marqueeMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .roadmap-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roadmap-arrow {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform .2s ease, background .2s ease, border-color .2s ease;
+        }
+
+        .roadmap-arrow:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .roadmap-track {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            overflow-y: visible;
+            padding-top: 14px;
+            padding-bottom: 18px;
+            margin-top: -14px;
+            scroll-snap-type: x proximity;
+            overscroll-behavior-x: contain;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #4f7cff rgba(255,255,255,0.06);
+        }
+
+        .roadmap-track::-webkit-scrollbar {
+            height: 9px;
+        }
+
+        .roadmap-track::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 999px;
+        }
+
+        .roadmap-track::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+            border-radius: 999px;
+        }
+
+        .roadmap-card {
+            position: relative;
+            min-width: 310px;
+            max-width: 310px;
+            min-height: 460px;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+            border-radius: 28px;
+            padding: 28px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03));
+            border: 1px solid rgba(255,255,255,0.09);
+            transition:
+                transform .32s ease,
+                border-color .32s ease,
+                background .32s ease,
+                box-shadow .32s ease,
+                opacity .32s ease;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .roadmap-card:hover {
+            transform: translateY(-10px);
+            z-index: 10;
+        }
+
+        .roadmap-phase,
+        .roadmap-status,
+        .roadmap-title {
+            transition: transform .24s ease, color .24s ease, opacity .24s ease;
+        }
+
+        .roadmap-card:hover .roadmap-phase {
+            color: #d6c6ff !important;
+        }
+
+        .roadmap-card:hover .roadmap-title {
+            transform: translateY(-1px);
+        }
+
+        .roadmap-card:hover .roadmap-status {
+            transform: translateY(-1px);
+        }
+
+        .roadmap-phase {
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            margin-bottom: 14px;
+        }
+
+        .roadmap-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-top: 18px;
+        }
+
+        .roadmap-status.live {
+            color: #9ff5d0;
+            background: rgba(52,211,153,0.12);
+            border: 1px solid rgba(52,211,153,0.18);
+        }
+
+        .cta-panel {
+            background:
+                radial-gradient(circle at top left, rgba(139,92,246,0.20), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(59,130,246,0.16), transparent 34%),
+                linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+        }
+
+        .menu-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .28s ease;
+        }
+
+        .menu-panel.open {
+            max-height: 420px;
+        }
+
+        @media (max-width: 768px) {
+            .page-top-space {
+                padding-top: 100px;
+            }
+
+            .product-line {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-card {
+                min-width: 85vw;
+                max-width: 85vw;
+            }
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .hero-actions .store-btn,
+        .hero-actions .social-btn {
+            min-width: 220px;
+        }
+
+        .hero-pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #e8eefc;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+        }
+
+        @media (max-width: 640px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-actions .store-btn,
+            .hero-actions .social-btn {
+                width: min(100%, 340px);
+                min-width: 0;
+            }
+
+            .hero-pill-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-pill {
+                width: min(100%, 340px);
+            }
         }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-200 bg-[#05070a]">
-
-    <div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div class="purple-glow absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-50"></div>
-        <div class="purple-glow absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full opacity-50"></div>
-    </div>
-
-    <div class="relative z-10">
-
-        <nav class="sticky top-0 z-50 flex justify-between items-center p-6 max-w-7xl mx-auto glass mt-4 rounded-2xl">
-            <a href="/" class="flex items-center gap-3 transition hover:opacity-80">
-                <img src="MoonChat-logo.png" alt="MoonChat Logo" class="h-10 w-auto">
-            </a>
-
-            <div class="space-x-6 hidden md:flex text-sm font-bold uppercase tracking-widest text-gray-400">
-                <a href="#features" class="hover:text-purple-400 transition">Features</a>
-                <a href="#roadmap" class="hover:text-purple-400 transition">Roadmap</a>
-                <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="hover:text-purple-400 transition border-b-2 border-purple-500">Twitter (X)</a>
-            </div>
-        </nav>
-
-        <header class="pt-20 pb-10 text-center px-4">
-            <div class="animate__animated animate__fadeInDown">
-                <span class="bg-purple-900/30 text-purple-400 border border-purple-500/30 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                    Chrome & Firefox are now live
-                </span>
-
-                <h1 class="text-6xl md:text-8xl font-black mt-8 mb-6 tracking-tight leading-none uppercase">
-                    NEVER MISS THE <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">ALPHA AGAIN.</span>
-                </h1>
-
-                <p class="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12 italic">
-                    The first Solana browser extension with <span class="text-white font-bold underline">Native Pop-out Mode</span>.
-                    Chat with the community right next to your chart.
-                </p>
-
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
-                    <a href="https://addons.mozilla.org/en-US/firefox/addon/moonchat/"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="firefox-btn px-10 py-5 rounded-2xl font-black text-xl text-white uppercase tracking-wide">
-                        <span class="absolute -top-3 -right-3 bg-white text-purple-700 text-[10px] px-3 py-1 rounded-full font-black shadow-lg">
-                            LIVE
-                        </span>
-                        ADD TO FIREFOX
+<body>
+    <div class="section-shell">
+        <header class="site-header" id="siteHeader">
+            <div class="max-w-7xl mx-auto nav-shell rounded-2xl px-4 sm:px-6 py-4">
+                <div class="flex items-center justify-between gap-4">
+                    <a href="/" class="flex items-center gap-3 shrink-0">
+                        <img src="MoonChat-logo.png" alt="MoonChat Logo" class="h-10 w-auto" />
                     </a>
-                
-                    <a href="https://chromewebstore.google.com/detail/fmdedjjaccmddcbgokainembhgiojpop?utm_source=item-share-cb"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="chrome-btn px-10 py-5 rounded-2xl font-black text-xl text-white uppercase tracking-wide">
-                        <span class="absolute -top-3 -right-3 bg-white text-red-600 text-[10px] px-3 py-1 rounded-full font-black shadow-lg">
-                            NEW
-                        </span>
-                        ADD TO CHROME
-                    </a>
-                </div>
-                <div class="mt-12 flex justify-center">
-                    <div class="btn-disabled flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 bg-white/2 relative">
-                        <img src="phantom-icon.png" alt="Phantom" class="w-6 h-6 opacity-40">
 
-                        <span class="font-black text-sm tracking-wider uppercase opacity-50">
-                            Connect Phantom
-                        </span>
+                    <nav class="hidden lg:flex items-center gap-8">
+                        <a href="#product" class="nav-link">Product</a>
+                        <a href="#compatible" class="nav-link">Compatible</a>
+                        <a href="#roadmap" class="nav-link">Roadmap</a>
+                        <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="nav-link">Support</a>
+                    </nav>
 
-                        <span class="text-[10px] bg-blue-600/50 text-white px-2.5 py-1 rounded-full ml-3 italic font-black transition-colors duration-300">
-                            SOON
-                        </span>
+                    <div class="hidden md:flex items-center gap-3">
+                        <a href="https://addons.mozilla.org/en-US/firefox/addon/moonchat/" target="_blank" rel="noopener noreferrer" class="store-btn firefox">
+                            Add to Firefox
+                        </a>
+                        <a href="https://chromewebstore.google.com/detail/fmdedjjaccmddcbgokainembhgiojpop?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" class="store-btn chrome">
+                            Add to Chrome
+                        </a>
                     </div>
-                </div>
-            </div>
 
-            <div class="mt-20 max-w-5xl mx-auto relative group animate__animated animate__zoomIn animate__delay-1s">
-                <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-
-                <div class="relative glass rounded-[2rem] p-2">
-                    <img src="preview.png" alt="MoonChat Popout Preview" class="rounded-[1.8rem] w-full shadow-2xl border border-white/10">
+                    <button id="menuBtn" class="lg:hidden inline-flex items-center justify-center w-12 h-12 rounded-xl glass-soft" aria-label="Open menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+                        </svg>
+                    </button>
                 </div>
 
-                <div class="absolute -top-4 -right-4 bg-purple-600 text-white px-4 py-2 rounded-lg font-black italic text-xs shadow-lg transform rotate-12">
-                    LIVE INTERFACE
+                <div id="mobileMenu" class="menu-panel lg:hidden">
+                    <div class="pt-4 mt-4 border-t border-white/10 flex flex-col gap-4">
+                        <a href="#product" class="nav-link w-fit">Product</a>
+                        <a href="#compatible" class="nav-link w-fit">Compatible</a>
+                        <a href="#roadmap" class="nav-link w-fit">Roadmap</a>
+                        <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="nav-link w-fit">Support</a>
+
+                        <div class="pt-2 flex flex-col gap-3">
+                            <a href="https://chromewebstore.google.com/detail/fmdedjjaccmddcbgokainembhgiojpop?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" class="store-btn chrome">
+                                Add to Chrome
+                            </a>
+                            <a href="https://addons.mozilla.org/en-US/firefox/addon/moonchat/" target="_blank" rel="noopener noreferrer" class="store-btn firefox">
+                                Add to Firefox
+                            </a>
+                            <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="social-btn x">
+                                Follow on X
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <section id="features" class="py-24 max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-10">
-            <div class="glass p-10 rounded-3xl">
-                <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mb-6 text-2xl">🔥</div>
-                <h3 class="text-2xl font-bold mb-4 italic uppercase">No Tab Chaos</h3>
-                <p class="text-gray-400 leading-relaxed font-medium">
-                    Open the chat in a dedicated pop-out window. Keep your eyes 100% on the chart while staying connected.
-                </p>
-            </div>
-
-            <div class="glass p-10 rounded-3xl border-blue-500/20">
-                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mb-6 text-2xl">⚡</div>
-                <h3 class="text-2xl font-bold mb-4 italic uppercase">Real-Time Data</h3>
-                <p class="text-gray-400 leading-relaxed font-medium">
-                    No lag. Optimized Solana nodes for instant messaging and trending token updates. Speed is alpha.
-                </p>
-            </div>
-
-            <div class="glass p-10 rounded-3xl border-green-500/20">
-                <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mb-6 text-2xl">🛡️</div>
-                <h3 class="text-2xl font-bold mb-4 italic uppercase">100% Secure</h3>
-                <p class="text-gray-400 leading-relaxed font-medium">
-                    Non-custodial. We never ask for your seed phrase. MoonChat is a communication tool, not a wallet.
-                </p>
-            </div>
-        </section>
-
-        <section id="roadmap" class="py-24 max-w-7xl mx-auto px-6 overflow-hidden">
-            <h2 class="text-4xl font-black mb-12 text-center italic uppercase tracking-tighter animate__animated animate__fadeIn text-white">
-                Mission <span class="text-purple-500 underline decoration-purple-500/30 text-gradient">Roadmap</span>
-            </h2>
-
-            <div class="flex gap-6 overflow-x-auto pb-10 pt-10 snap-x roadmap-scroll px-4">
-
-                <div class="min-w-[300px] md:min-w-[380px] snap-center p-8 border-l-4 border-purple-500 rounded-r-3xl glass roadmap-card bg-purple-500/5 relative transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:border-purple-400">
-                    <div class="flex justify-between items-start">
-                        <span class="text-purple-500 font-bold tracking-widest text-xs uppercase">Phase 01</span>
-                        <span class="bg-green-500/20 text-green-400 text-[10px] px-2 py-1 rounded font-black animate-pulse border border-green-500/30">OPERATIONAL</span>
+        <main class="page-top-space">
+            <section class="px-4 sm:px-6 pt-14 md:pt-20 pb-24 md:pb-32">
+                <div class="max-w-5xl mx-auto text-center">
+                    <div class="badge mb-8">
+                        <span class="badge-dot"></span>
+                        Chrome + Firefox are live
                     </div>
-                    <h4 class="text-2xl font-black mt-2 mb-4 uppercase italic">Genesis Launch</h4>
-                    <ul class="text-gray-300 text-sm space-y-3 font-medium">
-                        <li class="flex items-center gap-2"><span class="text-purple-500">✔</span> Native Pop-out Extension</li>
-                        <li class="flex items-center gap-2"><span class="text-purple-500">✔</span> Official MoonChat Web Hub</li>
-                        <li class="flex items-center gap-2"><span class="text-purple-500">✔</span> Twitter Alpha Network</li>
-                        <li class="flex items-center gap-2"><span class="text-purple-500">✔</span> Trending Room Algorithm</li>
-                        <li class="flex items-center gap-2"><span class="text-purple-500">✔</span> Personal Favorites v1.0</li>
-                    </ul>
-                </div>
 
-                <div class="min-w-[300px] md:min-w-[380px] snap-center p-8 border-l-4 border-blue-500 rounded-r-3xl glass roadmap-card relative overflow-hidden group opacity-80 transition-all duration-500 hover:opacity-100 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:border-blue-400">
-                    <div class="absolute inset-0 bg-blue-900/60 backdrop-blur-md flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 p-6 text-center">
-                        <span class="text-white font-black tracking-widest uppercase italic -rotate-12 border-2 border-blue-400 px-4 py-2 shadow-[0_0_15px_rgba(59,130,246,0.5)]">Data Locked</span>
-                        <p class="text-blue-200 text-[10px] mt-4 font-mono leading-tight">
-                            ENCRYPTED_INTEL:<br>Unlock scheduled after Phase 01 completion.
+                    <h1 class="hero-title font-display text-[3.4rem] sm:text-[4.8rem] lg:text-[7rem] font-black">
+                        Built for degens.
+                        <br />
+                        <span class="gradient-text">Designed like software.</span>
+                    </h1>
+
+                    <p class="mt-8 max-w-3xl mx-auto text-lg md:text-[1.35rem] leading-8 md:leading-9 muted">
+                        MoonChat gives Solana traders a cleaner way to follow sentiment without losing the chart.
+                        Open chat in native pop-out mode, move faster between rooms, and keep the whole trading flow sharp, fast and distraction-free.
+                    </p>
+
+                    <div class="hero-actions mt-12">
+                        <a href="https://chromewebstore.google.com/detail/fmdedjjaccmddcbgokainembhgiojpop?utm_source=item-share-cb"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="store-btn chrome">
+                            Add to Chrome
+                        </a>
+
+                        <a href="https://addons.mozilla.org/en-US/firefox/addon/moonchat/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="store-btn firefox">
+                            Add to Firefox
+                        </a>
+
+                        <a href="https://x.com/solanamoonchat"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="social-btn x">
+                            Follow on X
+                        </a>
+                    </div>
+
+                    <div class="hero-pill-row mt-10">
+                        <div class="hero-pill">Native Pop-out Mode</div>
+                        <div class="hero-pill">Faster Room Switching</div>
+                        <div class="hero-pill">Built for Solana Flow</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-4 sm:px-6 pb-24">
+                <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-6">
+                    <div class="glass simple-card">
+                        <div class="text-xs uppercase tracking-[0.22em] text-slate-500 font-black">01 / Focus</div>
+                        <div class="mt-4 text-3xl font-black">Less tab chaos</div>
+                        <p class="mt-4 text-slate-400 leading-8">
+                            Keep the room beside the chart instead of constantly bouncing between pages.
                         </p>
                     </div>
 
-                    <span class="text-blue-500 font-bold tracking-widest text-xs uppercase">Phase 02</span>
-                    <h4 class="text-2xl font-black mt-2 mb-4 uppercase italic text-blue-100">Social Sync</h4>
-
-                    <div class="space-y-4">
-                        <div class="h-1.5 w-full bg-blue-500/20 rounded overflow-hidden">
-                            <div class="h-full bg-blue-500 w-1/4 animate-pulse"></div>
-                        </div>
-                        <ul class="text-blue-400/30 text-xs space-y-2 font-mono uppercase tracking-tighter">
-                            <li>&gt; [AUTH_SYSTEM_PENDING]</li>
-                            <li>&gt; [STORE_IN_REVIEW]</li>
-                            <li>&gt; [SOCIAL_BRIDGE_ENCRYPTED]</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="min-w-[300px] md:min-w-[380px] snap-center p-8 border-l-4 border-gray-500 rounded-r-3xl glass roadmap-card relative overflow-hidden group opacity-60 transition-all duration-500 hover:opacity-100 hover:shadow-[0_0_30px_rgba(156,163,175,0.3)] hover:border-gray-400">
-                    <div class="absolute inset-0 bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 text-center p-6">
-                        <span class="text-gray-400 font-black tracking-widest uppercase italic border-2 border-gray-700 px-4 py-2">Restricted Access</span>
-                        <p class="text-gray-500 text-[9px] mt-4 font-mono">Rank [WHALE] or higher required to decrypt modules.</p>
-                    </div>
-
-                    <span class="text-gray-500 font-bold tracking-widest text-xs uppercase">Phase 03</span>
-                    <h4 class="text-2xl font-black mt-2 mb-4 uppercase italic text-gray-500">Alpha Intel</h4>
-
-                    <div class="flex flex-col gap-2 mt-4">
-                        <div class="h-2 w-3/4 bg-gray-800 rounded"></div>
-                        <div class="h-2 w-1/2 bg-gray-800 rounded"></div>
-                        <div class="h-2 w-full bg-gray-800 rounded opacity-50"></div>
-                    </div>
-                </div>
-
-                <div class="min-w-[300px] md:min-w-[380px] snap-center p-8 border-l-4 border-red-900 rounded-r-3xl glass roadmap-card relative overflow-hidden group opacity-40 transition-all duration-700 hover:opacity-100 hover:shadow-[0_0_40px_rgba(153,27,27,0.5)] hover:border-red-600">
-                    <div class="absolute inset-0 bg-gradient-to-br from-red-950/90 to-black backdrop-blur-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 text-center p-6">
-                        <div class="mb-4 flex gap-1">
-                            <div class="w-1 h-4 bg-red-600 animate-[bounce_1s_infinite]"></div>
-                            <div class="w-1 h-4 bg-red-600 animate-[bounce_1.2s_infinite]"></div>
-                            <div class="w-1 h-4 bg-red-600 animate-[bounce_0.8s_infinite]"></div>
-                        </div>
-                        <span class="text-red-500 font-black tracking-[0.3em] uppercase italic text-xs border border-red-500/50 px-3 py-1 mb-2">Unauthorized</span>
-                        <p class="text-red-200/50 text-[9px] font-mono leading-tight">
-                            CRITICAL_ERROR: User clearance too low.<br>Tracing IP... [FAILED]
+                    <div class="glass simple-card">
+                        <div class="text-xs uppercase tracking-[0.22em] text-slate-500 font-black">02 / Speed</div>
+                        <div class="mt-4 text-3xl font-black">Built for rotations</div>
+                        <p class="mt-4 text-slate-400 leading-8">
+                            In memecoin flow, speed matters. The interface should help you move, not slow you down.
                         </p>
                     </div>
 
-                    <span class="text-gray-600 font-bold tracking-widest text-xs uppercase">Phase 04</span>
-                    <h4 class="text-2xl font-black mt-2 mb-4 uppercase italic text-gray-700">Trader Ranks</h4>
-
-                    <div class="space-y-2 opacity-20">
-                        <div class="h-2 w-full bg-gray-800 rounded"></div>
-                        <div class="h-2 w-2/3 bg-gray-800 rounded"></div>
-                        <div class="h-2 w-3/4 bg-gray-800 rounded"></div>
+                    <div class="glass simple-card">
+                        <div class="text-xs uppercase tracking-[0.22em] text-slate-500 font-black">03 / Trust</div>
+                        <div class="mt-4 text-3xl font-black">Communication only</div>
+                        <p class="mt-4 text-slate-400 leading-8">
+                            MoonChat is not pretending to be your wallet. No seed phrase nonsense. No custody.
+                        </p>
                     </div>
-
-                    <p class="text-[10px] text-gray-800 mt-8 font-black uppercase tracking-widest">
-                        Level: Redacted
-                    </p>
                 </div>
+            </section>
 
-                <div class="min-w-[300px] md:min-w-[380px] snap-center p-8 border-l-4 border-yellow-600 rounded-r-3xl glass roadmap-card relative overflow-hidden group opacity-20 transition-all duration-1000 hover:opacity-100 hover:shadow-[0_0_50px_rgba(202,138,4,0.6)] hover:border-yellow-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-yellow-900/40 to-yellow-500/20 backdrop-blur-[40px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-700 z-20 text-center p-6">
-                        <div class="relative mb-6">
-                            <div class="absolute -inset-4 bg-yellow-500/30 blur-2xl rounded-full animate-pulse"></div>
-                            <span class="relative text-5xl text-yellow-500 font-black italic tracking-tighter">?</span>
-                        </div>
-
-                        <span class="text-yellow-500 font-black tracking-[0.5em] uppercase text-[10px] border-y border-yellow-500/50 py-2 mb-4">
-                            Singularity Reached
-                        </span>
-
-                        <p class="text-white text-[11px] font-bold italic leading-tight uppercase tracking-widest">
-                            The Final Alpha.<br>
-                            <span class="text-yellow-200/50 font-normal mt-2 block">[SYSTEM_REDACTED]</span>
+            <section id="product" class="px-4 sm:px-6 py-24">
+                <div class="max-w-7xl mx-auto grid lg:grid-cols-[0.85fr_1.15fr] gap-14 items-start">
+                    <div>
+                        <div class="eyebrow">Product</div>
+                        <h2 class="mt-6 text-4xl md:text-6xl font-black tracking-[-0.05em] leading-[1.03]">
+                            Not just chat.
+                            <span class="gradient-text">A better trading layer.</span>
+                        </h2>
+                        <p class="mt-6 text-lg leading-8 text-slate-400 max-w-xl">
+                            MoonChat should feel focused, sharp and useful at first glance. Less clutter, less filler, more direct value for people who live in Solana flow.
                         </p>
                     </div>
 
-                    <span class="text-yellow-900 font-bold tracking-widest text-xs uppercase self-start absolute top-8 left-8">Phase 05</span>
-
-                    <div class="flex flex-col items-center justify-center h-full">
-                        <div class="w-12 h-12 rounded-full border-2 border-yellow-900/20 flex items-center justify-center">
-                            <div class="w-2 h-2 bg-yellow-900/40 rounded-full animate-ping"></div>
+                    <div class="space-y-5">
+                        <div class="product-line">
+                            <div class="product-icon">01</div>
+                            <div>
+                                <h3 class="text-2xl font-black">Native pop-out mode</h3>
+                                <p class="mt-3 text-slate-400 leading-8">
+                                    Keep the conversation open in its own window and stop sacrificing chart space just to stay in the room.
+                                </p>
+                            </div>
                         </div>
-                        <h4 class="text-xl font-black text-yellow-900 uppercase italic mt-4 tracking-[0.2em]">Terminal</h4>
+
+                        <div class="product-line">
+                            <div class="product-icon">02</div>
+                            <div>
+                                <h3 class="text-2xl font-black">Cleaner room discovery</h3>
+                                <p class="mt-3 text-slate-400 leading-8">
+                                    Trending and favorites should make the social side of trading faster, lighter and easier to scan.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="product-line">
+                            <div class="product-icon">03</div>
+                            <div>
+                                <h3 class="text-2xl font-black">Ready for expansion</h3>
+                                <p class="mt-3 text-slate-400 leading-8">
+                                    The design leaves room for premium tools, trader utilities and a future memecoin starter stack without a full redesign later.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="flex justify-center mt-6 text-gray-600 animate-bounce cursor-default">
-                <span class="text-[10px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
-                    Scroll to explore the future <span class="text-purple-500">→</span>
-                </span>
-            </div>
-        </section>
+            <section id="compatible" class="px-4 sm:px-6 py-24">
+                <div class="max-w-7xl mx-auto">
+                    <div class="eyebrow">Compatible Flow</div>
 
-        <footer class="p-12 border-t border-white/5 bg-black/40">
-            <div class="max-w-7xl mx-auto flex flex-col items-center">
-                <div class="flex gap-6 mb-8 uppercase text-xs font-bold tracking-widest text-gray-500">
-                    <a href="imprint.html" class="hover:text-white transition">Legal Notice</a>
-                    <a href="privacy.html" class="hover:text-white transition font-medium">Privacy Policy</a>
-                    <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="hover:text-white transition font-medium">Support (X)</a>
+                    <div class="mt-6 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                        <div class="max-w-3xl">
+                            <h2 class="text-4xl md:text-6xl font-black tracking-[-0.05em] leading-[1.03]">
+                                Works where
+                                <span class="gradient-text">Solana attention moves.</span>
+                            </h2>
+                        </div>
+
+                        <p class="max-w-xl text-slate-400 text-lg leading-8">
+                            MoonChat should feel connected to the places traders already live in, not like a separate island.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 marquee-shell">
+                        <div class="marquee-track">
+                            <div class="marquee-group">
+                                <div class="marquee-chip">
+                                    <img src="axiom-icon.png" alt="Axiom" class="marquee-icon">
+                                    <span>Axiom</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="dexscreener-icon.png" alt="Dexscreener" class="marquee-icon">
+                                    <span>Dexscreener</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="gmgn-icon.png" alt="GMGN" class="marquee-icon">
+                                    <span>GMGN</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="pumpfun-icon.png" alt="Pump.fun" class="marquee-icon">
+                                    <span>Pump.fun</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="axiom-icon.png" alt="Axiom" class="marquee-icon">
+                                    <span>Axiom</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="dexscreener-icon.png" alt="Dexscreener" class="marquee-icon">
+                                    <span>Dexscreener</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="gmgn-icon.png" alt="GMGN" class="marquee-icon">
+                                    <span>GMGN</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="pumpfun-icon.png" alt="Pump.fun" class="marquee-icon">
+                                    <span>Pump.fun</span>
+                                </div>
+                            </div>
+
+                            <div class="marquee-group" aria-hidden="true">
+                                <div class="marquee-chip">
+                                    <img src="axiom-icon.png" alt="" class="marquee-icon">
+                                    <span>Axiom</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="dexscreener-icon.png" alt="" class="marquee-icon">
+                                    <span>Dexscreener</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="gmgn-icon.png" alt="" class="marquee-icon">
+                                    <span>GMGN</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="pumpfun-icon.png" alt="" class="marquee-icon">
+                                    <span>Pump.fun</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="axiom-icon.png" alt="" class="marquee-icon">
+                                    <span>Axiom</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="dexscreener-icon.png" alt="" class="marquee-icon">
+                                    <span>Dexscreener</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="gmgn-icon.png" alt="" class="marquee-icon">
+                                    <span>GMGN</span>
+                                </div>
+
+                                <div class="marquee-chip">
+                                    <img src="pumpfun-icon.png" alt="" class="marquee-icon">
+                                    <span>Pump.fun</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <div class="max-w-2xl text-center">
-                    <p class="text-[10px] text-gray-600 leading-relaxed uppercase tracking-tighter font-bold">
-                        DISCLAIMER: MoonChat is a visualization and communication tool. Trading cryptocurrencies, especially memecoins on Solana, involves extreme risk. We do not provide financial advice. We are not responsible for any financial losses. Always Do Your Own Research (DYOR).
-                    </p>
-                    <p class="mt-6 text-gray-700 text-[11px] font-bold tracking-[0.2em] uppercase">
-                        © 2026 MOONCHAT ORIGINAL. ALL RIGHTS RESERVED.
-                    </p>
+            <section id="roadmap" class="px-4 sm:px-6 py-24">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+                        <div class="max-w-3xl">
+                            <div class="eyebrow">Roadmap</div>
+                            <h2 class="mt-6 text-4xl md:text-6xl font-black tracking-[-0.05em] leading-[1.03]">
+                                Built in phases.
+                                <span class="gradient-text">Still hiding the best parts.</span>
+                            </h2>
+                            <p class="mt-6 text-lg leading-8 text-slate-400">
+                                The roadmap keeps the mysterious MoonChat vibe, but now it feels cleaner, more product-like and easier to explore.
+                            </p>
+                        </div>
+
+                        <div class="roadmap-toolbar">
+                            <button class="roadmap-arrow" id="roadmapPrev" aria-label="Scroll roadmap left">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+
+                            <button class="roadmap-arrow" id="roadmapNext" aria-label="Scroll roadmap right">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 roadmap-track" id="roadmapTrack">
+                        <article class="roadmap-card border-l-4 border-purple-500 bg-purple-500/5">
+                            <div class="flex justify-between items-start">
+                                <span class="roadmap-phase text-purple-400 font-bold tracking-widest text-xs uppercase">Phase 01</span>
+                                <span class="roadmap-status live bg-green-500/20 text-green-300 text-[10px] px-2 py-1 rounded font-black animate-pulse border border-green-500/30">
+                                    Operational
+                                </span>
+                            </div>
+
+                            <h3 class="roadmap-title text-3xl font-black mt-3 uppercase italic">Genesis Live</h3>
+
+                            <ul class="mt-6 text-slate-300 text-sm space-y-3 font-medium">
+                                <li class="flex items-center gap-2"><span class="text-purple-400">✔</span> Native Pop-out Mode</li>
+                                <li class="flex items-center gap-2"><span class="text-purple-400">✔</span> Web Hub Live</li>
+                                <li class="flex items-center gap-2"><span class="text-purple-400">✔</span> Chrome + Firefox Release</li>
+                                <li class="flex items-center gap-2"><span class="text-purple-400">✔</span> Trending + Favorites Foundation</li>
+                            </ul>
+                        </article>
+
+                        <article class="roadmap-card group border-l-4 border-blue-500 relative opacity-80 hover:opacity-100 hover:border-blue-400 hover:shadow-[0_0_30px_rgba(59,130,246,0.35)]">
+                            <div class="absolute inset-0 pointer-events-none bg-blue-950/70 backdrop-blur-md flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 p-6 text-center">
+                                <span class="text-white font-black tracking-widest uppercase italic -rotate-12 border-2 border-blue-400 px-4 py-2 shadow-[0_0_15px_rgba(59,130,246,0.45)]">
+                                    Data Locked
+                                </span>
+                                <p class="text-blue-200 text-[10px] mt-4 font-mono leading-tight">
+                                    ENCRYPTED_INTEL:<br>Unlock scheduled after Phase 01 completion.
+                                </p>
+                            </div>
+
+                            <span class="roadmap-phase text-blue-400 font-bold tracking-widest text-xs uppercase">Phase 02</span>
+                            <h3 class="roadmap-title text-3xl font-black mt-3 uppercase italic text-blue-100">Social Sync</h3>
+
+                            <div class="mt-6 space-y-4">
+                                <div class="h-1.5 w-full bg-blue-500/20 rounded overflow-hidden">
+                                    <div class="h-full bg-blue-500 w-1/4 animate-pulse"></div>
+                                </div>
+                                <ul class="text-blue-300/30 text-xs space-y-2 font-mono uppercase tracking-tighter">
+                                    <li>&gt; [identity_layer_pending]</li>
+                                    <li>&gt; [store_modules_in_review]</li>
+                                    <li>&gt; [social_bridge_encrypted]</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="roadmap-card group border-l-4 border-gray-500 relative opacity-60 hover:opacity-100 hover:border-gray-400 hover:shadow-[0_0_30px_rgba(156,163,175,0.25)]">
+                            <div class="absolute inset-0 pointer-events-none bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 text-center p-6">
+                                <span class="text-gray-300 font-black tracking-widest uppercase italic border-2 border-gray-700 px-4 py-2">
+                                    Restricted Access
+                                </span>
+                                <p class="text-gray-500 text-[9px] mt-4 font-mono">
+                                    Rank [WHALE] or higher required to decrypt modules.
+                                </p>
+                            </div>
+
+                            <span class="roadmap-phase text-gray-400 font-bold tracking-widest text-xs uppercase">Phase 03</span>
+                            <h3 class="roadmap-title text-3xl font-black mt-3 uppercase italic text-gray-300">Premium Tools</h3>
+
+                            <div class="flex flex-col gap-2 mt-6">
+                                <div class="h-2 w-3/4 bg-gray-800 rounded"></div>
+                                <div class="h-2 w-1/2 bg-gray-800 rounded"></div>
+                                <div class="h-2 w-full bg-gray-800 rounded opacity-50"></div>
+                            </div>
+                        </article>
+
+                        <article class="roadmap-card group border-l-4 border-red-900 relative opacity-40 hover:opacity-100 hover:border-red-600 hover:shadow-[0_0_40px_rgba(153,27,27,0.45)]">
+                            <div class="absolute inset-0 pointer-events-none bg-gradient-to-br from-red-950/90 to-black backdrop-blur-2xl flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500 z-20 text-center p-6">
+                                <div class="mb-4 flex gap-1">
+                                    <div class="w-1 h-4 bg-red-600 animate-[bounce_1s_infinite]"></div>
+                                    <div class="w-1 h-4 bg-red-600 animate-[bounce_1.2s_infinite]"></div>
+                                    <div class="w-1 h-4 bg-red-600 animate-[bounce_0.8s_infinite]"></div>
+                                </div>
+                                <span class="text-red-400 font-black tracking-[0.3em] uppercase italic text-xs border border-red-500/50 px-3 py-1 mb-2">
+                                    Unauthorized
+                                </span>
+                                <p class="text-red-200/50 text-[9px] font-mono leading-tight">
+                                    CRITICAL_ERROR: User clearance too low.<br>Tracing IP... [FAILED]
+                                </p>
+                            </div>
+
+                            <span class="roadmap-phase text-gray-500 font-bold tracking-widest text-xs uppercase">Phase 04</span>
+                            <h3 class="roadmap-title text-3xl font-black mt-3 uppercase italic text-gray-500">Trader Ranks</h3>
+
+                            <div class="space-y-2 opacity-20 mt-6">
+                                <div class="h-2 w-full bg-gray-800 rounded"></div>
+                                <div class="h-2 w-2/3 bg-gray-800 rounded"></div>
+                                <div class="h-2 w-3/4 bg-gray-800 rounded"></div>
+                            </div>
+
+                            <p class="text-[10px] text-gray-700 mt-8 font-black uppercase tracking-widest">
+                                Level: Redacted
+                            </p>
+                        </article>
+
+                        <article class="roadmap-card group border-l-4 border-yellow-600 relative opacity-20 hover:opacity-100 hover:border-yellow-500 hover:shadow-[0_0_50px_rgba(202,138,4,0.55)]">
+                            <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black via-yellow-900/40 to-yellow-500/20 backdrop-blur-[40px] flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-700 z-20 text-center p-6">
+                                <div class="relative mb-6">
+                                    <div class="absolute -inset-4 bg-yellow-500/30 blur-2xl rounded-full animate-pulse"></div>
+                                    <span class="relative text-5xl text-yellow-400 font-black italic tracking-tighter">?</span>
+                                </div>
+
+                                <span class="text-yellow-400 font-black tracking-[0.5em] uppercase text-[10px] border-y border-yellow-500/50 py-2 mb-4">
+                                    Singularity Reached
+                                </span>
+
+                                <p class="text-white text-[11px] font-bold italic leading-tight uppercase tracking-widest">
+                                    The Final Alpha.<br>
+                                    <span class="text-yellow-200/50 font-normal mt-2 block">[SYSTEM_REDACTED]</span>
+                                </p>
+                            </div>
+
+                            <span class="roadmap-phase text-yellow-700 font-bold tracking-widest text-xs uppercase">Phase 05</span>
+
+                            <div class="flex flex-col items-center justify-center flex-1 min-h-[220px]">
+                                <div class="w-12 h-12 rounded-full border-2 border-yellow-900/20 flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-yellow-900/40 rounded-full animate-ping"></div>
+                                </div>
+                                <h3 class="roadmap-title text-xl font-black text-yellow-800 uppercase italic mt-4 tracking-[0.2em]">
+                                    Terminal
+                                </h3>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="mt-5 text-[11px] uppercase tracking-[0.24em] text-slate-500 font-black">
+                        Drag, swipe or use the arrows to explore the roadmap →
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </section>
+
+            <section class="px-4 sm:px-6 py-24">
+                <div class="max-w-7xl mx-auto cta-panel glass rounded-[36px] p-8 md:p-14">
+                    <div class="grid lg:grid-cols-[1fr_auto] gap-10 items-center">
+                        <div class="max-w-3xl">
+                            <div class="eyebrow">Final Signal</div>
+                            <h2 class="mt-6 text-4xl md:text-6xl font-black tracking-[-0.05em] leading-[1.03]">
+                                MoonChat.
+                                <span class="gradient-text">Where Coins Talk.</span>
+                            </h2>
+                            <p class="mt-6 text-lg leading-8 text-slate-300">
+                                Built for people who trade fast, watch sentiment and want the whole experience to feel tighter, smoother and more serious.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row lg:flex-col gap-4">
+                            <a href="https://chromewebstore.google.com/detail/fmdedjjaccmddcbgokainembhgiojpop?utm_source=item-share-cb" target="_blank" rel="noopener noreferrer" class="store-btn chrome">
+                                Add to Chrome
+                            </a>
+                            <a href="https://addons.mozilla.org/en-US/firefox/addon/moonchat/" target="_blank" rel="noopener noreferrer" class="store-btn firefox">
+                                Add to Firefox
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="px-4 sm:px-6 pt-4 pb-14">
+                <div class="max-w-7xl mx-auto glass rounded-[28px] p-8 md:p-10">
+                    <div class="flex flex-col xl:flex-row gap-10 xl:items-start xl:justify-between">
+                        <div class="max-w-xl">
+                            <img src="MoonChat-logo.png" alt="MoonChat Logo" class="h-10 w-auto" />
+                            <p class="mt-5 text-slate-400 leading-8">
+                                MoonChat is building a cleaner social layer for Solana memecoin traders — sharp enough for degens, polished enough to grow into a real product ecosystem.
+                            </p>
+                        </div>
+
+                        <div class="grid sm:grid-cols-3 gap-10 text-sm">
+                            <div>
+                                <div class="text-white font-black uppercase tracking-[0.18em] mb-4">Product</div>
+                                <div class="space-y-3 text-slate-400">
+                                    <a href="#product" class="block hover:text-white transition">Features</a>
+                                    <a href="#compatible" class="block hover:text-white transition">Compatibility</a>
+                                    <a href="#roadmap" class="block hover:text-white transition">Roadmap</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-white font-black uppercase tracking-[0.18em] mb-4">Legal</div>
+                                <div class="space-y-3 text-slate-400">
+                                    <a href="imprint.html" class="block hover:text-white transition">Legal Notice</a>
+                                    <a href="privacy.html" class="block hover:text-white transition">Privacy Policy</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-white font-black uppercase tracking-[0.18em] mb-4">Community</div>
+                                <div class="space-y-3 text-slate-400">
+                                    <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="block hover:text-white transition">Support on X</a>
+                                    <a href="https://x.com/solanamoonchat" target="_blank" rel="noopener noreferrer" class="block hover:text-white transition">Updates</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 pt-8 border-t border-white/10 flex flex-col lg:flex-row gap-6 lg:items-end lg:justify-between">
+                        <p class="max-w-4xl text-[11px] leading-6 uppercase tracking-[0.12em] text-slate-500 font-bold">
+                            Disclaimer: MoonChat is a communication and interface tool. Trading cryptocurrencies, especially Solana memecoins, involves extreme risk.
+                            We do not provide financial advice and are not responsible for financial losses. Always do your own research.
+                        </p>
+
+                        <p class="text-[11px] uppercase tracking-[0.24em] text-slate-600 font-black shrink-0">
+                            © 2026 MoonChat Original
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </main>
     </div>
 
     <script>
-        const scrollContainer = document.querySelector('.roadmap-scroll');
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const siteHeader = document.getElementById("siteHeader");
 
-        if (scrollContainer) {
-            scrollContainer.addEventListener('wheel', (evt) => {
-                evt.preventDefault();
-                scrollContainer.scrollLeft += evt.deltaY * 1.5;
-            }, { passive: false });
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener("click", () => {
+                mobileMenu.classList.toggle("open");
+            });
+        }
+
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 18) {
+                siteHeader.classList.add("compact");
+            } else {
+                siteHeader.classList.remove("compact");
+            }
+        });
+
+        const roadmapTrack = document.getElementById("roadmapTrack");
+        const roadmapPrev = document.getElementById("roadmapPrev");
+        const roadmapNext = document.getElementById("roadmapNext");
+
+        if (roadmapTrack && roadmapPrev && roadmapNext) {
+            roadmapPrev.addEventListener("click", () => {
+                roadmapTrack.scrollBy({ left: -340, behavior: "smooth" });
+            });
+
+            roadmapNext.addEventListener("click", () => {
+                roadmapTrack.scrollBy({ left: 340, behavior: "smooth" });
+            });
         }
     </script>
 </body>
